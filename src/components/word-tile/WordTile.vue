@@ -2,18 +2,23 @@
   <label :for="`input-${props.row}-${props.index}`" hidden> Word Tile {{ props.index }} </label>
 
   <input
-    @keyup="$emit('populated')"
+    @keyup="onKeyUp($event)"
+    @keyup.delete="onErased"
     maxlength="1"
     type="text"
     :id="`input-${props.row}-${props.index}`"
-    :class="{ tile: true, [`input-${props.index}`]: true }"
+    :class="{ tile: true, [`input-row-${props.row}`]: true, [`${props.state}`]: true }"
+    :value="charValue"
+    onkeydown="return /[a-z]/i.test(event.key)"
   />
 </template>
 
 <script setup lang="ts">
-import { onMounted, watch } from 'vue'
+import { onMounted, watch, ref } from 'vue'
 
-defineEmits(['populated'])
+const charValue = ref('')
+
+const emit = defineEmits(['populated', 'erased'])
 
 const props = defineProps({
   focused: {
@@ -27,6 +32,10 @@ const props = defineProps({
   row: {
     type: Number,
     required: true
+  },
+  state: {
+    type: String,
+    options: ['unknown', 'correct', 'incorrect', 'position-incorrect']
   }
 })
 
@@ -39,15 +48,30 @@ onMounted(() => {
   }
 })
 
-watch(props, (props) => {
+watch(props, (newProps) => {
   const input: HTMLInputElement | null = document.getElementById(
-    `input-${props.row}-${props.index}`
+    `input-${newProps.row}-${newProps.index}`
   )
-  if (input && props.focused) {
-    console.log('focusing' + props.index)
+  if (input && newProps.focused) {
     input.focus()
   }
 })
+
+function onKeyUp(event: Event) {
+  if (isCharLetter(event.key)) {
+    charValue.value = event.key
+    emit('populated', event.key)
+  }
+}
+
+function onErased() {
+  charValue.value = ''
+  emit('erased')
+}
+
+function isCharLetter(char: string) {
+  return /^[a-z]$/i.test(char)
+}
 </script>
 
 <style scoped>
@@ -65,6 +89,22 @@ watch(props, (props) => {
 
   &:focus {
     outline: -webkit-focus-ring-color auto 1px;
+  }
+
+  &.unknown {
+    background-color: #fff;
+  }
+
+  &.correct {
+    background-color: #b2f5b2;
+  }
+
+  &.incorrect {
+    background-color: #f5b2b2;
+  }
+
+  &.position-incorrect {
+    background-color: #f5f5b2;
   }
 }
 </style>
