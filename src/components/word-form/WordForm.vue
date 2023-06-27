@@ -22,7 +22,7 @@ import { ref } from 'vue'
 import WordTile from '../word-tile/WordTile.vue'
 import { useGameBoardCommands } from '../game-board/state/commands/GameBoard.commands'
 
-const emit = defineEmits(['submit'])
+const emit = defineEmits(['submit', 'matched'])
 
 const props = defineProps({
   row: {
@@ -65,7 +65,12 @@ async function onSubmit() {
   if (isWord) {
     _updateRowColors(word, props.solution)
     isNotWord.value = false
+    _disableForm()
     emit('submit', word)
+
+    if (_isGameWon(props.solution, word)) {
+      emit('matched')
+    }
   } else {
     isNotWord.value = true
   }
@@ -102,6 +107,17 @@ function _getStatus(solution, word, index) {
   } else {
     return 'incorrect'
   }
+}
+
+function _disableForm() {
+  const inputs: NodeListOf<HTMLInputElement> = document.querySelectorAll(`.input-row-${props.row}`)
+  for (const input of inputs) {
+    input.disabled = true
+  }
+}
+
+function _isGameWon(solution, word) {
+  return solution === word
 }
 </script>
 

@@ -1,5 +1,7 @@
 <template>
   <div class="board">
+    <span v-if="gameWon"> You won! </span>
+
     <WordForm
       @submit="onSubmit"
       :is-active-row="i === activeRow"
@@ -7,6 +9,7 @@
       :key="i"
       :row="i"
       :solution="solution"
+      @matched="onGameWon"
     />
 
     <KeyBoard />
@@ -20,10 +23,15 @@ import { ref } from 'vue'
 import { useGameBoardObserver } from './state/observer/GameBoard.observer'
 
 const activeRow = ref(0)
+const gameWon = ref(false)
 const { solution } = useGameBoardObserver()
 
 function onSubmit(word: string) {
   activeRow.value++
+}
+
+function onGameWon() {
+  gameWon.value = true
 }
 </script>
 
