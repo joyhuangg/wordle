@@ -44,6 +44,8 @@ const isNotWord = ref(false)
 const maxWordLength = 5
 const charStates = ref(Array(maxWordLength).fill('unknown'))
 
+const { validateWord, addLetterToBank } = useGameBoardCommands()
+
 function focusNextOncePopulated(letter: string, index: number) {
   const nextElementIndex = Number(index) + 1
   if (nextElementIndex < maxWordLength) {
@@ -81,21 +83,25 @@ function _createWord() {
 function _updateRowColors(word, solution) {
   let newCharState: String[] = []
   for (let i = 0; i < word.length; i++) {
-    if (word[i] === solution[i]) {
-      newCharState.push('correct')
-    } else if (solution.includes(word[i])) {
-      newCharState.push('position-incorrect')
-    } else {
-      newCharState.push('incorrect')
-    }
+    const status = _getStatus(solution, word, i)
+    newCharState.push(status)
+    addLetterToBank(word[i], status)
   }
   charStates.value = newCharState
 }
 
 function _isValidWord(word) {
-  const { validateWord } = useGameBoardCommands()
-
   return validateWord(word)
+}
+
+function _getStatus(solution, word, index) {
+  if (word[index] === solution[index]) {
+    return 'correct'
+  } else if (solution.includes(word[index])) {
+    return 'incorrectPositions'
+  } else {
+    return 'incorrect'
+  }
 }
 </script>
 
@@ -103,7 +109,7 @@ function _isValidWord(word) {
 .wordForm {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   width: 100%;
   height: 100%;
   padding: 0 10px;

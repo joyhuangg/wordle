@@ -8,11 +8,14 @@
       :row="i"
       :solution="solution"
     />
+
+    <KeyBoard />
   </div>
 </template>
 
 <script setup lang="ts">
 import WordForm from '../word-form/WordForm.vue'
+import KeyBoard from '../key-board/KeyBoard.vue'
 import { ref } from 'vue'
 import { useGameBoardObserver } from './state/observer/GameBoard.observer'
 

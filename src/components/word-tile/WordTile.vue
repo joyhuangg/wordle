@@ -35,7 +35,7 @@ const props = defineProps({
   },
   state: {
     type: String,
-    options: ['unknown', 'correct', 'incorrect', 'position-incorrect']
+    options: ['unknown', 'correct', 'incorrect', 'incorrectPositions']
   }
 })
 
@@ -103,7 +103,7 @@ function isCharLetter(char: string) {
     background-color: #f5b2b2;
   }
 
-  &.position-incorrect {
+  &.incorrectPositions {
     background-color: #f5f5b2;
   }
 }

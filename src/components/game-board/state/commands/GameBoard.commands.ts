@@ -28,6 +28,15 @@ export const useGameBoardCommands = () => {
       .catch((error: string) => handleError(error))
   }
 
+  const addLetterToBank = (letter: string, state: string) => {
+    store.$patch({
+      letterBank: {
+        ...store.letterBank,
+        [state]: [...store.letterBank[state], letter]
+      }
+    })
+  }
+
   const setStatusToLoading = () =>
     store.$patch({
       status: 'loading'
@@ -49,6 +58,7 @@ export const useGameBoardCommands = () => {
   return {
     fetchWord,
     validateWord,
+    addLetterToBank,
     reset: store.$reset
   }
 }
