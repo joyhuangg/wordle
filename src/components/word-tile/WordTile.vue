@@ -40,16 +40,14 @@ const props = defineProps({
 })
 
 onMounted(() => {
-  const input: HTMLInputElement | null = document.getElementById(
-    `input-${props.row}-${props.index}`
-  )
+  const input: HTMLElement | null = document.getElementById(`input-${props.row}-${props.index}`)
   if (input && props.focused) {
     input.focus()
   }
 })
 
 watch(props, (newProps) => {
-  const input: HTMLInputElement | null = document.getElementById(
+  const input: HTMLElement | null = document.getElementById(
     `input-${newProps.row}-${newProps.index}`
   )
   if (input && newProps.focused) {
@@ -57,7 +55,7 @@ watch(props, (newProps) => {
   }
 })
 
-function onKeyUp(event: Event) {
+function onKeyUp(event: KeyboardEvent) {
   if (isCharLetter(event.key)) {
     charValue.value = event.key
     emit('populated', event.key)

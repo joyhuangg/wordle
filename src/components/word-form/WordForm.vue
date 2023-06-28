@@ -85,7 +85,7 @@ function _createWord() {
   return word
 }
 
-function _updateRowColors(word, solution) {
+function _updateRowColors(word: string, solution: string) {
   let newCharState: String[] = []
   for (let i = 0; i < word.length; i++) {
     const status = _getStatus(solution, word, i)
@@ -95,11 +95,11 @@ function _updateRowColors(word, solution) {
   charStates.value = newCharState
 }
 
-function _isValidWord(word) {
+function _isValidWord(word: string) {
   return validateWord(word)
 }
 
-function _getStatus(solution, word, index) {
+function _getStatus(solution: string, word: string, index: number) {
   if (word[index] === solution[index]) {
     return 'correct'
   } else if (solution.includes(word[index])) {
@@ -116,7 +116,7 @@ function _disableForm() {
   }
 }
 
-function _isGameWon(solution, word) {
+function _isGameWon(solution: string, word: string) {
   return solution === word
 }
 </script>

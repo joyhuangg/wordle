@@ -1,6 +1,5 @@
-import { http } from '@rip/core/http'
-
 import { getWord, validateWord as validateWordEndpoint } from '../api/GameBoard.api'
+import type { LetterBank } from '../model/GameBoard.model'
 import { useGameBoardObserver } from '../observer/GameBoard.observer'
 import { useGameBoardStore } from '../store/GameBoard.store'
 
@@ -32,7 +31,7 @@ export const useGameBoardCommands = () => {
     store.$patch({
       letterBank: {
         ...store.letterBank,
-        [state]: [...store.letterBank[state], letter]
+        [state]: [...store.letterBank[state as keyof LetterBank], letter]
       }
     })
   }
