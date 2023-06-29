@@ -1,11 +1,15 @@
 import { defineStore } from 'pinia'
-import type { LetterBank } from '../model/GameBoard.model'
 
 export interface GameBoardState {
   solution: string
   status: string
   errorMessage?: string
-  letterBank: LetterBank
+  guessedWords: string[]
+  activeRow: number
+  gameOver: boolean
+  lastWordIsInvalid: boolean
+  wordLength: number
+  tries: number
 }
 
 export const useGameBoardStore = defineStore('GameBoardStore', {
@@ -13,10 +17,11 @@ export const useGameBoardStore = defineStore('GameBoardStore', {
     solution: '' as string,
     status: 'idle',
     errorMessage: undefined,
-    letterBank: {
-      correct: [],
-      incorrect: [],
-      incorrectPositions: []
-    }
+    guessedWords: ['', '', '', '', '', ''],
+    activeRow: 0,
+    gameOver: false,
+    wordLength: 5,
+    tries: 6,
+    lastWordIsInvalid: false
   })
 })

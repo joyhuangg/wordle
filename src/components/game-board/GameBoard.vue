@@ -1,37 +1,43 @@
 <template>
   <div class="board">
-    <span v-if="gameWon"> You won! </span>
+    <span v-if="gameOver && lastWordMatched"> You won! </span>
+
+    <span v-else-if="gameOver"> You lost! </span>
 
     <WordForm
-      @submit="onSubmit"
       :is-active-row="i === activeRow"
-      v-for="i of Array(6).keys()"
+      v-for="i of Array(tries).keys()"
       :key="i"
       :row="i"
       :solution="solution"
-      @matched="onGameWon"
+      :word="guessedWords[i]"
+      :show-state="i < activeRow"
     />
 
-    <KeyBoard />
+    <KeyBoard :disabled="gameOver" @erased="onErased" @populated="onPopulated" @submit="onSubmit" />
   </div>
 </template>
 
 <script setup lang="ts">
 import WordForm from '../word-form/WordForm.vue'
 import KeyBoard from '../key-board/KeyBoard.vue'
-import { ref } from 'vue'
 import { useGameBoardObserver } from './state/observer/GameBoard.observer'
+import { useGameBoardCommands } from './state/commands/GameBoard.commands'
 
-const activeRow = ref(0)
-const gameWon = ref(false)
-const { solution } = useGameBoardObserver()
+const { solution, gameOver, lastWordMatched, activeRow, tries, guessedWords } =
+  useGameBoardObserver()
+const { submitWord, removeLastLetterOfActiveWord, addToActiveWord } = useGameBoardCommands()
 
-function onSubmit(word: string) {
-  activeRow.value++
+function onSubmit() {
+  submitWord()
 }
 
-function onGameWon() {
-  gameWon.value = true
+function onErased() {
+  removeLastLetterOfActiveWord()
+}
+
+function onPopulated(letter: string) {
+  addToActiveWord(letter)
 }
 </script>
 

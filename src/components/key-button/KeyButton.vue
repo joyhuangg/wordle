@@ -21,11 +21,11 @@ const { letterBank } = useGameBoardObserver()
 
 const status = computed(() => {
   if (
-    letterBank.value.correct.includes(props.letter) ||
-    letterBank.value.incorrectPositions.includes(props.letter)
+    letterBank.value.correct.has(props.letter) ||
+    letterBank.value.incorrectPositions.has(props.letter)
   ) {
     return 'correct'
-  } else if (letterBank.value.incorrect.includes(props.letter)) {
+  } else if (letterBank.value.incorrect.has(props.letter)) {
     return 'incorrect'
   } else {
     return 'available'
@@ -40,7 +40,7 @@ const status = computed(() => {
   border-radius: 5px;
   color: #000;
   cursor: pointer;
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: bold;
   height: 50px;
   width: 50px;

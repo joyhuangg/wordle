@@ -1,30 +1,23 @@
 <template>
   <label :for="`input-${props.row}-${props.index}`" hidden> Word Tile {{ props.index }} </label>
 
-  <input
-    @keyup="onKeyUp($event)"
-    @keyup.delete="onErased"
-    maxlength="1"
-    type="text"
+  <div
     :id="`input-${props.row}-${props.index}`"
     :class="{ tile: true, [`input-row-${props.row}`]: true, [`${props.state}`]: true }"
     :value="charValue"
-    onkeydown="return /[a-z]/i.test(event.key)"
-  />
+  >
+    {{ charValue }}
+  </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, watch, ref } from 'vue'
-
-const charValue = ref('')
-
 const emit = defineEmits(['populated', 'erased'])
 
 const props = defineProps({
-  focused: {
-    type: Boolean,
-    required: true
-  },
+  // focused: {
+  //   type: Boolean,
+  //   required: true
+  // },
   index: {
     type: Number,
     required: true
@@ -36,40 +29,12 @@ const props = defineProps({
   state: {
     type: String,
     options: ['unknown', 'correct', 'incorrect', 'incorrectPositions']
+  },
+  charValue: {
+    type: String,
+    required: true
   }
 })
-
-onMounted(() => {
-  const input: HTMLElement | null = document.getElementById(`input-${props.row}-${props.index}`)
-  if (input && props.focused) {
-    input.focus()
-  }
-})
-
-watch(props, (newProps) => {
-  const input: HTMLElement | null = document.getElementById(
-    `input-${newProps.row}-${newProps.index}`
-  )
-  if (input && newProps.focused) {
-    input.focus()
-  }
-})
-
-function onKeyUp(event: KeyboardEvent) {
-  if (isCharLetter(event.key)) {
-    charValue.value = event.key
-    emit('populated', event.key)
-  }
-}
-
-function onErased() {
-  charValue.value = ''
-  emit('erased')
-}
-
-function isCharLetter(char: string) {
-  return /^[a-z]$/i.test(char)
-}
 </script>
 
 <style scoped>

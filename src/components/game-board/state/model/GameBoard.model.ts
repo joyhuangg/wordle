@@ -1,5 +1,5 @@
 export interface LetterBank {
-  correct: string[]
-  incorrect: string[]
-  incorrectPositions: string[]
+  correct: Set<string>
+  incorrect: Set<string>
+  incorrectPositions: Set<string>
 }
