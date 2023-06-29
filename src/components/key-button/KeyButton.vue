@@ -40,10 +40,10 @@ const status = computed(() => {
   border-radius: 5px;
   color: #000;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.75rem;
   font-weight: bold;
-  height: 50px;
-  width: 50px;
+  height: 32px;
+  width: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
